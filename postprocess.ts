@@ -35,7 +35,7 @@ const response: ITokopediaPopularKeywordResponse = await readJSON(filename);
 
 const keywords = response["data"]["popular_keywords"]["keywords"];
 
-const trends: trend[] = keywords.map(
+const currentTrends: trend[] = keywords.map(
   ({ keyword, image_url, product_count }) => {
     return {
       keyword,
@@ -46,5 +46,9 @@ const trends: trend[] = keywords.map(
   },
 );
 
-const newfile = `tokopedia_trends.json`;
-await writeJSON(newfile, trends);
+const output = `tokopedia_trends.json`;
+const existingTrends = await readJSON(output);
+
+const trends = existingTrends.concat(currentTrends)
+
+await writeJSON(output, trends);
