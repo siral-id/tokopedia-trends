@@ -1,0 +1,29 @@
+name: Flat
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+    # - cron: '0 9 * * *'
+
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup deno
+        uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.10.x
+      - name: Check out repo
+        uses: actions/checkout@v2
+      # The Flat Action step. We fetch the data in the http_url and save it as downloaded_filename
+      - name: Fetch data
+        uses: githubocto/flat@v3
+        with:
+          http_url: https://gql.tokopedia.com
+          axios_config: {"method":"post","data":{"query":"query PopularKeyword($page: Int) {popular_keywords(page: $page) {recommendation_type title sub_title keywords { url image_url keyword product_count product_count_formatted __typename } __typename } }"}}
+          downloaded_filename: data.json
+          postprocess: postprocess.ts
