@@ -21,7 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
 
-      - name: Fetch All Tokopedia Trends
-        run: deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch-trends.ts
+      - name: Set ENV
+        run: |
+           echo MONGO_DB_URI=$MONGO_DB_URI >> .env
         env:
           MONGO_DB_URI: ${{ secrets.MONGO_DB_URI}}
+
+      - name: Fetch All Tokopedia Trends
+        run: deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch-trends.ts
