@@ -7,6 +7,9 @@ import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/m
 import { MongoClient } from "https://deno.land/x/mongo@v0.30.0/mod.ts";
 
 const MONGO_DB_URI = Deno.env.get("MONGO_DB_URI");
+if (!MONGO_DB_URI){
+  Deno.exit();
+}
 const client = new MongoClient();
 await client.connect(MONGO_DB_URI);
 const db = client.database("db_siral");
