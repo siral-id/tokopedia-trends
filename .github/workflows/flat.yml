@@ -17,13 +17,16 @@ jobs:
         uses: denoland/setup-deno@main
         with:
           deno-version: v1.10.x
-      - name: Check out repo
-        uses: actions/checkout@v2
-      # The Flat Action step. We fetch the data in the http_url and save it as downloaded_filename
-      - name: Fetch data
-        uses: githubocto/flat@v3
+
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Fetch All Tokopedia Trends
+        run: deno run -A --unstable fetch-trends.ts
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
         with:
-          http_url: https://gql.tokopedia.com
-          axios_config: query.json
-          downloaded_filename: data.json
-          postprocess: postprocess.ts
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: main
+          force: true
