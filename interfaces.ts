@@ -1,3 +1,5 @@
+import { ObjectId } from "https://deno.land/x/mongo@v0.30.0/mod.ts";
+
 export interface ITokopediaPopularKeywordDataPopularKeywordKeyword {
   url: string;
   image_url: string;
@@ -26,5 +28,8 @@ export interface ITrend {
   image: string;
   count: number;
   source: string;
-  timestamp: string;
+}
+
+export interface ITrendSchema extends ITrend {
+  _id: ObjectId;
 }

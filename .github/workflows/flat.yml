@@ -22,11 +22,6 @@ jobs:
         uses: actions/checkout@master
 
       - name: Fetch All Tokopedia Trends
-        run: deno run -A --unstable fetch-trends.ts
-
-      - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branch: main
-          force: true
+        run: deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch-trends
+        env:
+          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI}}
