@@ -3,16 +3,7 @@ import {
   ITrend,
   ITrendSchema,
 } from "./interfaces.ts";
-import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
-import { MongoClient } from "https://deno.land/x/mongo@v0.30.0/mod.ts";
-
-const MONGO_DB_URI = Deno.env.get("MONGO_DB_URI");
-if (!MONGO_DB_URI){
-  Deno.exit();
-}
-const client = new MongoClient();
-await client.connect(MONGO_DB_URI);
-const db = client.database("db_siral");
+import { appendJSON, sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
@@ -83,9 +74,8 @@ await Promise.all(offsets.map(async (offset) => {
     },
   );
 
-  const trendCollections = db.collection<ITrendSchema>("trends");
-  const insertIds = await trendCollections.insertMany(trends);
-  console.log(insertIds);
+  const output = `tokopedia_trends.json`;
+  await appendJSON(output, trends);
   // prevent hammering the api source
   await sleep(sleepDuration);
 }));
