@@ -1,7 +1,6 @@
 import {
   ITokopediaPopularKeywordResponse,
-  ITrend,
-  ITrendSchema,
+  ITrend
 } from "./interfaces.ts";
 import { appendJSON, sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
 
