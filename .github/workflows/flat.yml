@@ -27,3 +27,10 @@ jobs:
            deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch-trends.ts
         env:
           MONGO_DB_URI: ${{ secrets.MONGO_DB_URI}}
+
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: main
+          force: true
