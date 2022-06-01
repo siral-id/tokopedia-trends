@@ -1,8 +1,10 @@
+import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
+import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
+import { getMongoClient } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/database.ts";
 import {
-  ITokopediaPopularKeywordResponse,
-  ITrend
-} from "./interfaces.ts";
-import { appendJSON, sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
+  ITrend,
+  ITrendSchema,
+} from "https://raw.githubusercontent.com/siral-id/deno-utility/main/interfaces.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
@@ -73,8 +75,12 @@ await Promise.all(offsets.map(async (offset) => {
     },
   );
 
-  const output = `tokopedia_trends.json`;
-  await appendJSON(output, trends);
+  const mongoUri = Deno.env.get("MONGO_URI");
+  if (!mongoUri) throw new Error("MONGO_URI not found");
+
+  const client = await getMongoClient(mongoUri);
+  const collection = client.database().collection<ITrendSchema>("trends");
+  await collection.insertMany(trends);
   // prevent hammering the api source
   await sleep(sleepDuration);
 }));

@@ -20,10 +20,3 @@ export interface ITokopediaPopularKeywordData {
 export interface ITokopediaPopularKeywordResponse {
   data: ITokopediaPopularKeywordData;
 }
-
-export interface ITrend {
-  keyword: string;
-  image: string;
-  count: number;
-  source: string;
-}

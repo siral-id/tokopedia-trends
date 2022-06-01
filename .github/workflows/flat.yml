@@ -16,17 +16,18 @@ jobs:
       - name: Setup deno
         uses: denoland/setup-deno@main
         with:
-          deno-version: v1.10.x
+          deno-version: v1.22.x
 
       - name: Checkout code
         uses: actions/checkout@master
 
       - name: Fetch All Tokopedia Trends
         run: |
-           echo MONGO_DB_URI=$MONGO_DB_URI >> .env
+           echo MONGO_URI=$MONGO_URI >> .env
+           export $(cat .env | xargs)
            deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch-trends.ts
         env:
-          MONGO_DB_URI: ${{ secrets.MONGO_DB_URI}}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
       - name: Commit & Push changes
         uses: actions-js/push@master
