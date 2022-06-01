@@ -8,7 +8,13 @@ import {
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
-const sleepDuration = 1;
+const sleepDuration = 0.1;
+
+const mongoUri = Deno.env.get("MONGO_URI");
+if (!mongoUri) throw new Error("MONGO_URI not found");
+
+const client = await getMongoClient(mongoUri);
+const collection = client.database().collection<ITrendSchema>("trends");
 
 await Promise.all(offsets.map(async (offset) => {
   const myHeaders = new Headers();
@@ -75,11 +81,6 @@ await Promise.all(offsets.map(async (offset) => {
     },
   );
 
-  const mongoUri = Deno.env.get("MONGO_URI");
-  if (!mongoUri) throw new Error("MONGO_URI not found");
-
-  const client = await getMongoClient(mongoUri);
-  const collection = client.database().collection<ITrendSchema>("trends");
   await collection.insertMany(trends);
   // prevent hammering the api source
   await sleep(sleepDuration);
