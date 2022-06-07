@@ -39,21 +39,22 @@ await Promise.all(offsets.map(async (offset) => {
   const data: ITokopediaPopularKeywordResponse = await response.json();
 
   const keywords = data["data"]["popular_keywords"]["keywords"];
-  const trends: ITrend[] = keywords.map(
+  keywords.map(
     ({ keyword, image_url, product_count }) => {
       const timestamp = new Date().toISOString();
 
-      return {
+      const record = {
         keyword,
         count: product_count,
         image: image_url,
         source: "TOKOPEDIA",
         timestamp,
       };
+      totalTrends.push(record)
+      return record
     },
   );
 
-  totalTrends.concat(trends);
   // prevent hammering the api source
   await sleep(sleepDuration);
 }));
