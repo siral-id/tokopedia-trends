@@ -1,12 +1,15 @@
 import { Octokit } from "https://cdn.skypack.dev/octokit?dts";
-import { v4 } from "https://deno.land/std/uuid/mod.ts"
+import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
 import { popularKeywordQuery } from "./gql.ts";
 import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
 import { tokopediaHeader } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/header.ts";
 import {
-  ITrend
+  ITrend,
 } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/interfaces.ts";
+import {
+  Source,
+} from "https://raw.githubusercontent.com/siral-id/deno-utility/main/enum.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
@@ -17,7 +20,7 @@ if (!ghToken) throw new Error("GH_TOKEN not found");
 
 const octokit = new Octokit({ auth: ghToken });
 
-const totalTrends: ITrend[] = []
+const totalTrends: ITrend[] = [];
 
 await Promise.all(offsets.map(async (offset) => {
   const graphql = JSON.stringify({
@@ -47,11 +50,11 @@ await Promise.all(offsets.map(async (offset) => {
         keyword,
         count: product_count,
         image: image_url,
-        source: "TOKOPEDIA",
+        source: Source.TOKOPEDIA,
         timestamp,
       };
-      totalTrends.push(record)
-      return record
+      totalTrends.push(record);
+      return record;
     },
   );
 
@@ -59,11 +62,11 @@ await Promise.all(offsets.map(async (offset) => {
   await sleep(sleepDuration);
 }));
 
-const uuid=v4.generate();
+const uuid = v4.generate();
 
 await octokit.rest.issues.create({
   owner: "siral-id",
   repo: "database",
   title: `WRITE_TRENDS_TOKOPEDIA_${uuid}`,
-  body: JSON.stringify(totalTrends)
+  body: JSON.stringify(totalTrends),
 });
