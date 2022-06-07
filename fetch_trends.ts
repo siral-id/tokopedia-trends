@@ -53,6 +53,7 @@ await Promise.all(offsets.map(async (offset) => {
         source: Source.TOKOPEDIA,
         timestamp,
       };
+
       totalTrends.push(record);
       return record;
     },
