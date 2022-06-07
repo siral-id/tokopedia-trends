@@ -1,3 +1,5 @@
+import { Octokit } from "https://cdn.skypack.dev/octokit?dts";
+import { v4 } from "https://deno.land/std/uuid/mod.ts"
 import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
 import { popularKeywordQuery } from "./gql.ts";
 import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
@@ -17,6 +19,8 @@ if (!mongoUri) throw new Error("MONGO_URI not found");
 
 const client = await getMongoClient(mongoUri);
 const collection = client.database().collection<ITrendSchema>("trends");
+
+const totalTrends: ITrend[] = []
 
 await Promise.all(offsets.map(async (offset) => {
   const graphql = JSON.stringify({
@@ -52,7 +56,16 @@ await Promise.all(offsets.map(async (offset) => {
     },
   );
 
-  await collection.insertMany(trends);
+  totalTrends.concat(trends);
   // prevent hammering the api source
   await sleep(sleepDuration);
 }));
+
+const uuid=v4.generate();
+
+await octokit.rest.issues.create({
+  owner: "siral-id",
+  repo: "database",
+  title: `WRITE_TRENDS_TOKOPEDIA_${uuid}`,
+  body: JSON.stringify(totalTrends)
+});
