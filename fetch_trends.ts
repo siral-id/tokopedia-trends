@@ -3,22 +3,19 @@ import { v4 } from "https://deno.land/std/uuid/mod.ts"
 import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
 import { popularKeywordQuery } from "./gql.ts";
 import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
-import { getMongoClient } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/database.ts";
 import { tokopediaHeader } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/header.ts";
 import {
-  ITrend,
-  ITrendSchema,
+  ITrend
 } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/interfaces.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
 const sleepDuration = 0.1;
 
-const mongoUri = Deno.env.get("MONGO_URI");
-if (!mongoUri) throw new Error("MONGO_URI not found");
+const ghToken = Deno.env.get("GH_TOKEN");
+if (!ghToken) throw new Error("GH_TOKEN not found");
 
-const client = await getMongoClient(mongoUri);
-const collection = client.database().collection<ITrendSchema>("trends");
+const octokit = new Octokit({ auth: ghToken });
 
 const totalTrends: ITrend[] = []
 
