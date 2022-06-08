@@ -2,7 +2,7 @@ import { Octokit } from "https://cdn.skypack.dev/octokit?dts";
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
 import { popularKeywordQuery } from "./gql.ts";
-import { sleep, tokopediaHeader, ITrend, Source } from "https://raw.githubusercontent.com/siral-id/core/main/mod.ts";
+import { sleep, tokopediaHeader, ICreateTrend, Source } from "https://raw.githubusercontent.com/siral-id/core/main/mod.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
@@ -13,7 +13,7 @@ if (!ghToken) throw new Error("GH_TOKEN not found");
 
 const octokit = new Octokit({ auth: ghToken });
 
-const totalTrends: ITrend[] = [];
+const totalTrends: ICreateTrend[] = [];
 
 await Promise.all(offsets.map(async (offset) => {
   const graphql = JSON.stringify({
