@@ -64,3 +64,5 @@ await octokit.rest.issues.create({
   title: `WRITE_TRENDS_TOKOPEDIA_${uuid}`,
   body: JSON.stringify(totalTrends),
 });
+
+Deno.exit()
