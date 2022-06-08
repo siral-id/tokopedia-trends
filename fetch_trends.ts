@@ -2,14 +2,7 @@ import { Octokit } from "https://cdn.skypack.dev/octokit?dts";
 import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { ITokopediaPopularKeywordResponse } from "./interfaces.ts";
 import { popularKeywordQuery } from "./gql.ts";
-import { sleep } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/utility.ts";
-import { tokopediaHeader } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/header.ts";
-import {
-  ITrend,
-} from "https://raw.githubusercontent.com/siral-id/deno-utility/main/interfaces.ts";
-import {
-  Source,
-} from "https://raw.githubusercontent.com/siral-id/deno-utility/main/enum.ts";
+import { sleep, tokopediaHeader, ITrend, Source } from "https://raw.githubusercontent.com/siral-id/deno-utility/main/mod.ts";
 
 const noOfPages = 10;
 const offsets = Array.from(Array(noOfPages).keys());
