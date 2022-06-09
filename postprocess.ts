@@ -1,5 +1,3 @@
-import { Octokit } from "https://cdn.skypack.dev/octokit@v1.7.2?dts";
-import { v4 } from "https://deno.land/std@0.142.0/uuid/mod.ts";
 import {
   ITokopediaPopularKeywordResponse,
   popularKeywordQuery,
@@ -10,11 +8,6 @@ import {
   Source,
   tokopediaHeader,
 } from "https://raw.githubusercontent.com/siral-id/core/main/mod.ts";
-
-export function setupOctokit(ghToken?: string): Octokit {
-  if (!ghToken) throw new Error("GH_TOKEN not found");
-  return new Octokit({ auth: ghToken });
-}
 
 export async function pull(
   noOfPages = 10,
@@ -60,15 +53,4 @@ export async function pull(
     );
   }));
   return trends.flat(1);
-}
-
-export async function upload(octokit: Octokit, data: ICreateTrend[]) {
-  const uuid = v4.generate();
-
-  await octokit.rest.issues.create({
-    owner: "siral-id",
-    repo: "core",
-    title: `WRITE_TRENDS_TOKOPEDIA_${uuid}`,
-    body: JSON.stringify(data),
-  });
 }
