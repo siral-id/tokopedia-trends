@@ -23,10 +23,8 @@ jobs:
 
       - name: Fetch All Tokopedia Trends
         run: |
-           echo MONGO_URI=$MONGO_URI >> .env
            echo GH_TOKEN=$GH_TOKEN >> .env
            export $(cat .env | xargs)
-           deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable fetch_trends.ts
+           deno run -q --allow-read --allow-write --allow-run --allow-net --allow-env --unstable cli.ts
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
