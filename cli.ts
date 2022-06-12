@@ -22,7 +22,7 @@ const uploadWithRetry = async <T>(
     await upload<T>(
       octokit,
       data,
-      "WRITE_TOKOPEDIA_TRENDS",
+      "WRITE_TRENDS_TOKOPEDIA",
     );
   } catch (error) {
     await sleep(retryCount);
