@@ -4,6 +4,7 @@ import {
   setupOctokit,
   sleep,
   upload,
+  Pipeline
 } from "https://raw.githubusercontent.com/siral-id/core/main/mod.ts";
 
 const ghToken = Deno.env.get("GH_TOKEN");
@@ -22,7 +23,7 @@ const uploadWithRetry = async <T>(
     await upload<T>(
       octokit,
       data,
-      "WRITE_TRENDS_TOKOPEDIA",
+      Pipeline.TokopediaTrends
     );
   } catch (error) {
     await sleep(retryCount);
